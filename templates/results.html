@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h2>Summary</h2>
+    <div class="summary">
+        <div class="summary-item">
+            <strong>Total Invoices</strong>
+            <div>{{ summary.invoices }}</div>
+        </div>
+        <div class="summary-item">
+            <strong>Total Payments</strong>
+            <div>{{ summary.payments }}</div>
+        </div>
+        <div class="summary-item">
+            <strong>Matched Pairs</strong>
+            <div>{{ summary.matched_pairs }}</div>
+        </div>
+        <div class="summary-item">
+            <strong>Unmatched Invoices</strong>
+            <div>{{ summary.unmatched_invoices }}</div>
+            {% if summary.unmatched_invoices == 0 %}
+                <span class="badge success">All clear</span>
+            {% else %}
+                <span class="badge warn">Needs review</span>
+            {% endif %}
+        </div>
+        <div class="summary-item">
+            <strong>Unmatched Payments</strong>
+            <div>{{ summary.unmatched_payments }}</div>
+            {% if summary.unmatched_payments == 0 %}
+                <span class="badge success">All clear</span>
+            {% else %}
+                <span class="badge warn">Needs review</span>
+            {% endif %}
+        </div>
+    </div>
+    <div class="actions">
+        <a class="button-link secondary" href="{{ url_for('index') }}">Start Another Reconciliation</a>
+        <a class="button-link" href="{{ url_for('export', fmt='json', section='matches', result_id=result_id) }}" target="_blank">Download JSON</a>
+        <a class="button-link" href="{{ url_for('export', fmt='csv', section='matches', result_id=result_id) }}">Matches CSV</a>
+        <a class="button-link" href="{{ url_for('export', fmt='csv', section='unmatched_invoices', result_id=result_id) }}">Unmatched Invoices CSV</a>
+        <a class="button-link" href="{{ url_for('export', fmt='csv', section='unmatched_payments', result_id=result_id) }}">Unmatched Payments CSV</a>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Matched Pairs</h2>
+    {% if matches %}
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Invoice ID</th>
+                        <th>Customer</th>
+                        <th>Invoice Date</th>
+                        <th>Amount</th>
+                        <th>Payment ID</th>
+                        <th>Payer</th>
+                        <th>Payment Date</th>
+                        <th>Amount</th>
+                        <th>Rule</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in matches %}
+                    <tr>
+                        <td>{{ record.invoice.invoice_id }}</td>
+                        <td>{{ record.invoice.customer_name }}</td>
+                        <td>{{ record.invoice.invoice_date }}</td>
+                        <td>{{ record.invoice.amount }}</td>
+                        <td>{{ record.payment.payment_id }}</td>
+                        <td>{{ record.payment.payer_name }}</td>
+                        <td>{{ record.payment.payment_date }}</td>
+                        <td>{{ record.payment.amount }}</td>
+                        <td>{{ record.rule }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-state">No matches found yet. Try widening the date window or double-checking CSV amounts.</div>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2>Unmatched Invoices</h2>
+    {% if unmatched_invoices %}
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Invoice ID</th>
+                        <th>Customer</th>
+                        <th>Invoice Date</th>
+                        <th>Amount</th>
+                        <th>Currency</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for invoice in unmatched_invoices %}
+                    <tr>
+                        <td>{{ invoice.invoice_id }}</td>
+                        <td>{{ invoice.customer_name }}</td>
+                        <td>{{ invoice.invoice_date }}</td>
+                        <td>{{ invoice.amount }}</td>
+                        <td>{{ invoice.currency }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-state">All invoices matched.</div>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2>Unmatched Payments</h2>
+    {% if unmatched_payments %}
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Payment ID</th>
+                        <th>Payer</th>
+                        <th>Payment Date</th>
+                        <th>Amount</th>
+                        <th>Currency</th>
+                        <th>Reference</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for payment in unmatched_payments %}
+                    <tr>
+                        <td>{{ payment.payment_id }}</td>
+                        <td>{{ payment.payer_name }}</td>
+                        <td>{{ payment.payment_date }}</td>
+                        <td>{{ payment.amount }}</td>
+                        <td>{{ payment.currency }}</td>
+                        <td>{{ payment.reference }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-state">All payments matched.</div>
+    {% endif %}
+</div>
+{% endblock %}

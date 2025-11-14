@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h2>Get started in three quick steps</h2>
+    <ol>
+        <li>Export your invoices and payments as CSV files (sample formats live in <code>sample_data</code>).</li>
+        <li>Choose the tolerance window that controls how far apart invoice and payment dates can be.</li>
+        <li>Review the matches and download the breakdown as JSON or CSV.</li>
+    </ol>
+</div>
+
+<div class="card">
+    <form action="{{ url_for('reconcile') }}" method="post" enctype="multipart/form-data">
+        <label for="invoices_file">Upload Invoices CSV</label>
+        <input id="invoices_file" name="invoices_file" type="file" accept=".csv" required>
+        <p class="field-hint">Columns required: invoice id, customer name, invoice date, due date, currency, amount.</p>
+
+        <label for="payments_file">Upload Payments CSV</label>
+        <input id="payments_file" name="payments_file" type="file" accept=".csv" required>
+        <p class="field-hint">Columns required: payment id, payer name, payment date, currency, amount, reference.</p>
+
+        <label for="date_window">Date window (days)</label>
+        <input id="date_window" name="date_window" type="number" min="0" max="180" value="30">
+        <p class="field-hint">We match receipt dates within +/- the window, so increasing it loosens the rules.</p>
+
+        <button type="submit">Run Reconciliation</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Invoice & Payment Reconciliation</title>
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            --bg: #f4f6fb;
+            --card-bg: #ffffff;
+            --border: #e1e7f0;
+            --text: #1c2a3a;
+            --muted: #5c6f82;
+            --accent: #2563eb;
+            --accent-dark: #1d4ed8;
+            --success: #15803d;
+            --error: #b91c1c;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+        }
+        .app-shell {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 3rem clamp(1.5rem, 4vw, 3rem);
+        }
+        header { margin-bottom: 2rem; }
+        header h1 { margin: 0; font-size: clamp(1.8rem, 3vw, 2.4rem); }
+        header p { color: var(--muted); margin-top: 0.4rem; }
+        .card {
+            background: var(--card-bg);
+            padding: 1.75rem;
+            margin-bottom: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 35px -25px rgba(15, 23, 42, 0.35);
+        }
+        .card h2 { margin-top: 0; }
+        .summary {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            margin-top: 1rem;
+        }
+        .summary-item {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            background: #f8fafc;
+        }
+        .summary-item strong { display: block; color: var(--muted); font-size: 0.9rem; }
+        .summary-item div { font-size: 1.6rem; font-weight: 600; margin-top: 0.3rem; }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.15rem 0.7rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: #e0e7ff;
+            color: #312e81;
+        }
+        .badge.success { background: #dcfce7; color: var(--success); }
+        .badge.warn { background: #fee2e2; color: var(--error); }
+        .empty-state {
+            border: 1px dashed var(--border);
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            color: var(--muted);
+            margin-top: 1rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+        }
+        th, td { padding: 0.75rem; border-bottom: 1px solid var(--border); text-align: left; }
+        thead th {
+            font-size: 0.8rem;
+            letter-spacing: 0.02rem;
+            text-transform: uppercase;
+            color: var(--muted);
+            background: #f8fafc;
+        }
+        .table-wrapper { overflow-x: auto; }
+        .actions {
+            margin-top: 1.25rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+        .button-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.6rem 1.1rem;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            text-decoration: none;
+            font-weight: 600;
+            color: #fff;
+            background: var(--accent);
+            transition: all 0.15s ease;
+        }
+        .button-link.secondary {
+            background: transparent;
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+        .button-link:hover { background: var(--accent-dark); color: #fff; }
+        .button-link.secondary:hover {
+            background: rgba(37, 99, 235, 0.08);
+        }
+        .flash {
+            padding: 0.9rem 1.1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border: 1px solid;
+        }
+        .flash.error { background: #fef2f2; border-color: #fecaca; color: var(--error); }
+        .flash.success { background: #ecfdf5; border-color: #bbf7d0; color: var(--success); }
+        form label { display: block; font-weight: 600; margin-bottom: 0.35rem; }
+        form input[type="file"],
+        form input[type="number"] {
+            width: 100%;
+            padding: 0.65rem 0.8rem;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        form .field-hint { font-size: 0.85rem; color: var(--muted); margin-top: -0.4rem; margin-bottom: 0.8rem; }
+        form button {
+            padding: 0.75rem 1.6rem;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background 0.15s ease;
+        }
+        form button:hover { background: var(--accent-dark); }
+        @media (max-width: 640px) {
+            .card { padding: 1.25rem; }
+            th, td { white-space: nowrap; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-shell">
+        <header>
+            <h1>Invoice & Payment Reconciliation</h1>
+            <p>Upload invoice and payment CSV files to see automatic matches.</p>
+        </header>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,16 @@
+payment_id,payer_name,payment_date,currency,amount,reference
+PAY-2001,Acme Corp,2024-01-08,USD,1500.00,Wire INV-1001
+PAY-2002,Futura LLC,2024-02-05,USD,4200.00,Payment for invoice INV-1002
+PAY-2003,Nimbus Inc,2024-01-18,USD,605.00,Partial INV-1003
+PAY-2004,Orbit Solutions,2024-01-25,EUR,2500.00,Bank transfer INV-1005
+PAY-2005,Lumenis Co,2024-02-10,USD,980.50,ACH INV-1004
+PAY-2006,Acme Corp,2024-02-15,USD,3100.00,Wire for INV-1006
+PAY-2007,Unknown Payer,2024-02-20,USD,725.00,Statement ref 8891
+PAY-2008,Vertex Labs,2024-01-30,USD,725.00,INV-1007 paid
+PAY-2009,Summit Media,2024-02-11,USD,1850.25,INV1008 remit
+PAY-2010,BlueRiver AG,2024-02-18,EUR,910.10,INV-1009 settle
+PAY-2011,Cascade Retail,2024-02-07,USD,1320.00,Invoice INV-1010
+PAY-2012,Futura LLC,2024-02-20,USD,2600.00,Second remit INV-1011
+PAY-2013,Northwind Traders,2024-02-15,USD,480.75,Card INV-1012
+PAY-2014,Driftwood Holdings,2024-02-22,USD,510.00,Consulting Feb
+PAY-2015,Orbit Solutions,2024-02-25,EUR,400.00,Credit memo OS-77
