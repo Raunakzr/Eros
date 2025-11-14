@@ -18,10 +18,12 @@ Payments need: payment_id, payer_name, payment_date, currency, amount, reference
 
 ## Quick Start
 # Install
-```python -m venv .venv
-   .venv\Scripts\activate
-   pip install -r requirements.txt
+```
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
 ```
 # Run
-```flask --app reconcile_app.web run --reload
+```
+flask --app reconcile_app.web run --reload
 ```
